@@ -1,40 +1,21 @@
+//
 console.log("Ahgora extension running!");
-
-let insertion = "<table id='extensionInsertion' class='table table-bordered table-striped'></table>";
-$(insertion).insertAfter("#tableTotalize");
-$("#extensionInsertion").html("<tr><td><b>Resumo do dia</b></td><td class='text-right' id='date'></td></tr>");
-$("#extensionInsertion").append("<tr><td>Hora de entrada</td><td class='text-right' id='entry'></td>");
-$("#extensionInsertion").append("<tr><td>Horas trabalhadas</td><td class='text-right' id='done'></td>");
-$("#extensionInsertion").append("<tr><td>Horas faltantes</td><td class='text-right' id='left'></td>");
-$("#extensionInsertion").append("<tr><td><b>Hora de saida</b></td><td class='text-right' id='leave'></td>");
-
-
-let currentDate = getCurrentDate().join('/');
-$("#date").html(today);
-
-let data = '11:14, 16:28, 17:33, 20:30';
-let timeTable= mapTable(data);
-var today = new WorkDay(timeTable[0]);
-today.calculateAllTimes(timeTable);
-
-//calculateJourney(data);
-$("#entry").html(currentDate);
-$("#done").html(today.);
-$("#left").html();
-$("#leave").html();
-
-
-
 
 //~~~~~functions~~~~~//
 
+function printableTime(time){
+		return ('0'+time[0]).slice(-2)+':'+('0'+time[1]).slice(-2);
+}
+
+
 function calculateJourney(data){
 	let timeTable= mapTable(data);
-	var today = new WorkDay(timeTable[0]);
+	let today = new WorkDay(timeTable[0]);
 	today.calculateAllTimes(timeTable);
 	//clearResults();
 	//printStatus(today);
 	//printAllResults(today);
+	return today;
 }
 
 //~~ functions below ~~//
@@ -203,5 +184,30 @@ class WorkDay {
 		}
 		return string;
 	}
-		
+}
+
+main();
+
+function main(){
+//insert table
+	let insertion = "<table class='table table-bordered table-striped'><tbody id='extensionInsertion'></tbody></table>";
+	$(insertion).insertAfter("#tableTotalize");
+	$("#extensionInsertion").html("<tr><td style='font-weight:bold'>Resumo do dia</td><td class='text-right' id='date' style='font-weight:bold'></td></tr>");
+	$("#extensionInsertion").append("<tr><td>Hora de entrada</td><td class='text-right' id='entry'></td>");
+	$("#extensionInsertion").append("<tr><td>Horas trabalhadas</td><td class='text-right' id='done'></td>");
+	$("#extensionInsertion").append("<tr><td>Horas faltantes</td><td class='text-right' id='left'></td>");
+	$("#extensionInsertion").append("<tr><td style='font-weight:bold'><b>Hora de saida</b></td><td class='text-right' id='leave' style='font-weight:bold'></td>");
+
+//populate table
+	let currentDate = getCurrentDate().join('/');
+	$("#date").html(currentDate);
+
+	let data = '08:14';
+	let timeTable= mapTable(data);
+	let today = new WorkDay(timeTable[0]);
+	today.calculateAllTimes(timeTable);
+	$("#entry").html(printableTime(today.entryTime));
+	$("#done").html(printableTime(today.hoursDone));
+	$("#left").html(printableTime(today.hoursLeft));
+	$("#leave").html(printableTime(today.leaveTime));
 }
