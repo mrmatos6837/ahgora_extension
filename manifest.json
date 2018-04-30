@@ -1,0 +1,13 @@
+{
+  "name": "Calculadora de jornada - Ahgora",
+  "version": "0.1",
+  "description": "Adiciona uma linha com a hora estimada de saída do trabalho na pagina de batidas do ahgora.",
+  "permissions": ["activeTab"],
+  "content_scripts":[
+    {
+      "matches": ["https://www.ahgora.com.br/externo/batidas/*"],
+      "js": ["jquery-3.3.1.js", "content.js"]
+    }
+  ],
+  "manifest_version": 2
+}
