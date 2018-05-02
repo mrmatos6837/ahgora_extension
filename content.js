@@ -77,8 +77,16 @@ function getCurrentTime(){
 function getCurrentDate(){
 	let d = new Date();
 	let day = ('0'+d.getDate()).slice(-2);
-	let month = ('0'+d.getMonth()).slice(-2);
+	let month = ('0'+(d.getMonth()+1)).slice(-2); //nao sei porque +1... array index?
 	return [day, month]
+}
+
+function getCurrentMonth(){
+	let d = new Date();
+	let month = ('0'+(d.getMonth()+1)).slice(-2); //nao sei porque +1... array index?
+	let year = ('0'+d.getFullYear()).slice(-2);
+	console.log(year);
+	return [month, year]
 }
 
 function printResults(string) {
@@ -189,20 +197,25 @@ class WorkDay {
 main();
 
 function main(){
-//insert table
-	let insertion = "<table class='table table-bordered table-striped'><tbody id='extensionInsertion'></tbody></table>";
+//insert elements
+	let monthHeader = "<tr style='font-weight:bold'><td>Resumo do Mês</td><td class='text-right' id='month'></td></tr>";
+	$("#tableTotalize").prepend(monthHeader);
+
+	let insertion = "<table id='tableTotalize' class='table table-bordered table-striped'><tbody id='extensionInsertion'></tbody></table>";
 	$(insertion).insertAfter("#tableTotalize");
-	$("#extensionInsertion").html("<tr><td style='font-weight:bold'>Resumo do dia</td><td class='text-right' id='date' style='font-weight:bold'></td></tr>");
+	$("#extensionInsertion").html("<tr style='font-weight:bold'><td style='width:771px;height:25px'>Resumo do dia</td><td class='text-right' id='date'></td></tr>");
 	$("#extensionInsertion").append("<tr><td>Hora de entrada</td><td class='text-right' id='entry'></td>");
 	$("#extensionInsertion").append("<tr><td>Horas trabalhadas</td><td class='text-right' id='done'></td>");
 	$("#extensionInsertion").append("<tr><td>Horas faltantes</td><td class='text-right' id='left'></td>");
-	$("#extensionInsertion").append("<tr><td style='font-weight:bold'><b>Hora de saida</b></td><td class='text-right' id='leave' style='font-weight:bold'></td>");
+	$("#extensionInsertion").append("<tr style='font-weight:bold'><td>Hora de saida</td><td class='text-right' id='leave'></td>");
 
 //populate table
 	let currentDate = getCurrentDate().join('/');
+	let currentMonth = getCurrentMonth().join('/');
 	$("#date").html(currentDate);
+	$("#month").html(currentMonth);
 
-	let data = '08:14';
+	let data = $("td:contains('"+currentDate+"')").next().next().text();
 	let timeTable= mapTable(data);
 	let today = new WorkDay(timeTable[0]);
 	today.calculateAllTimes(timeTable);
