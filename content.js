@@ -4,7 +4,7 @@ console.log("Ahgora extension running!");
 //~~~~~functions~~~~~//
 
 function printableTime(time){
-		return ('0'+time[0]).slice(-2)+':'+('0'+time[1]).slice(-2);
+	return ('0'+time[0]).slice(-2)+':'+('0'+time[1]).slice(-2);
 }
 
 
@@ -32,6 +32,7 @@ function joinComma(array){
 }
 
 function mapTable(data){
+	
 	let arrayOfdata = splitComma(data);
 	for (var i = arrayOfdata.length - 1; i >= 0; i--) {
 		arrayOfdata[i] = splitColon(arrayOfdata[i]);
@@ -85,7 +86,6 @@ function getCurrentMonth(){
 	let d = new Date();
 	let month = ('0'+(d.getMonth()+1)).slice(-2); //nao sei porque +1... array index?
 	let year = ('0'+d.getFullYear()).slice(-2);
-	console.log(year);
 	return [month, year]
 }
 
@@ -122,25 +122,33 @@ function clearResults(){
 
 class WorkDay {
 	constructor(entry) {
-		this.entryTime=entry;
+		this.table=entry;
+		this.entryTime=[];
 		this.lastEntry=[];
 		this.leaveTime=[];
 		this.workJourney= [8,0];
 		this.hoursLeft=[];
 		this.hoursDone= [0,0];
 		this.status= ""; // working, not working, extra-hours
+		console.log(this.table[0][0]);
+		console.log(this.table.length);
+	}
+
+	getEntryTime(){
+		this.entryTime[0]  = Number(this.table[0][0]*1);
+		this.entryTime[1]  = Number(this.table[0][1]*1);
 	}
 	
-	calculateHoursDone(array){
-		if (array.length%2==0){
+	calculateHoursDone(){
+		if (this.table.length%2==0){
 			this.status = "not working";
 		}
 		else {
 			this.status = "working";
-			this.lastEntry = array.pop();
+			this.lastEntry = this.table.pop();
 		}
-		for (var i = 0; i < array.length; i+=2) {
-			this.hoursDone = addTime(this.hoursDone, subTime(array[i], array[i+1]));
+		for (var i = 0; i < this.table.length; i+=2) {
+			this.hoursDone = addTime(this.hoursDone, subTime(this.table[i], this.table[i+1]));
 		}
 		if(this.status == "working"){
 			this.hoursDone = addTime(this.hoursDone, subTime(this.lastEntry, getCurrentTime()));
@@ -161,13 +169,14 @@ class WorkDay {
 			this.leaveTime = addTime(getCurrentTime(), this.hoursLeft);
 		}
 		else {
-			this.leaveTime = this.status;
+			this.leaveTime = "--/--";
 		}
 		//alert(this.leaveTime);
 	}
 
-	calculateAllTimes(array) { //order matters
-		this.calculateHoursDone(array);
+	calculateAllTimes() { //order matters
+		this.getEntryTime();
+		this.calculateHoursDone(this.table);
 		this.calculateHoursLeft();
 		this.calculateLeaveTime();
 		
@@ -203,7 +212,7 @@ function main(){
 
 	let insertion = "<table id='tableTotalize' class='table table-bordered table-striped'><tbody id='extensionInsertion'></tbody></table>";
 	$(insertion).insertAfter("#tableTotalize");
-	$("#extensionInsertion").html("<tr style='font-weight:bold'><td style='width:771px;height:25px'>Resumo do dia</td><td class='text-right' id='date'></td></tr>");
+	$("#extensionInsertion").html("<tr style='font-weight:bold'><td style='width:771px;height:25px'>Resumo do dia</td><td class='text-right' id='date' style='width:16%'></td></tr>");
 	$("#extensionInsertion").append("<tr><td>Hora de entrada</td><td class='text-right' id='entry'></td>");
 	$("#extensionInsertion").append("<tr><td>Horas trabalhadas</td><td class='text-right' id='done'></td>");
 	$("#extensionInsertion").append("<tr><td>Horas faltantes</td><td class='text-right' id='left'></td>");
@@ -214,11 +223,17 @@ function main(){
 	let currentMonth = getCurrentMonth().join('/');
 	$("#date").html(currentDate);
 	$("#month").html(currentMonth);
-
 	let data = $("td:contains('"+currentDate+"')").next().next().text();
-	let timeTable= mapTable(data);
-	let today = new WorkDay(timeTable[0]);
-	today.calculateAllTimes(timeTable);
+	let timeTable;
+	console.log(1+"     23     ");
+	if(data.length>1){
+		timeTable = mapTable(data);
+	}
+	else{
+		timeTable = data;
+	}
+	let today = new WorkDay(timeTable);
+	today.calculateAllTimes();
 	$("#entry").html(printableTime(today.entryTime));
 	$("#done").html(printableTime(today.hoursDone));
 	$("#left").html(printableTime(today.hoursLeft));
