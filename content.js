@@ -169,7 +169,7 @@ class WorkDay {
 			this.leaveTime = addTime(getCurrentTime(), this.hoursLeft);
 		}
 		else {
-			this.leaveTime = "--/--";
+			this.leaveTime = "--:--";
 		}
 		//alert(this.leaveTime);
 	}
@@ -212,7 +212,7 @@ function main(){
 
 	let insertion = "<table id='tableTotalize' class='table table-bordered table-striped'><tbody id='extensionInsertion'></tbody></table>";
 	$(insertion).insertAfter("#tableTotalize");
-	$("#extensionInsertion").html("<tr style='font-weight:bold'><td style='width:771px;height:25px'>Resumo do dia</td><td class='text-right' id='date' style='width:16%'></td></tr>");
+	$("#extensionInsertion").html("<tr style='font-weight:bold'><td style='width:771px;height:25px'>Resumo do dia</td><td class='text-right' id='date' style='width:15.25%'></td></tr>");
 	$("#extensionInsertion").append("<tr><td>Hora de entrada</td><td class='text-right' id='entry'></td>");
 	$("#extensionInsertion").append("<tr><td>Horas trabalhadas</td><td class='text-right' id='done'></td>");
 	$("#extensionInsertion").append("<tr><td>Horas faltantes</td><td class='text-right' id='left'></td>");
