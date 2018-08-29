@@ -1,27 +1,7 @@
-var defaultJourney = 480;
-var defaultBreak = 60;
-
 function load_options() {
 	chrome.storage.sync.get(["myJourney"], function(items) {
     	document.getElementById('journey').value = items.myJourney;
   	});
-}
-
-function options() {
-	var myJourney = localStorage["myJourney"];
-
-	// valid colors are red, blue, green and yellow
-	if (myJourney == undefined || (myJourney != '480' && myJourney != '360' && myJourney != '240')) {
-		myJourney = defaultJourney;
-	}
-	var select = document.getElementById("journey");
-	for (var i = 0; i < select.children.length; i++) {
-		var child = select.children[i];
-			if (child.value === myJourney) {
-			child.selected = "true";
-			break;
-		}
-	}
 }
 
 function save_options() {
@@ -37,6 +17,7 @@ function save_options() {
 			}, 750);
 	});
 }
+
 function restore_options() {
 	chrome.storage.sync.get({
 		myJourney: 480

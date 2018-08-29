@@ -1,32 +1,20 @@
 //
-console.log("Ahgora extension running!");
+// 29/08/2018
+//
+// Created by Marcos R.
+// He who started with 0 knowledge of javascript
+// and somehow managed to build something that works.
+//
+// Good luck refactoring.
+//
 
-//myJourney = 480;
-var myBreak = 60;
 
-//~~~~~functions~~~~~//
+//~~~~~ utility functions ~~~~~//
 
 function printableTime(time){
 	var hour = time_convert_to_hours(time);
 	return ('0'+hour[0]).slice(-2)+':'+('0'+hour[1]).slice(-2);
 }
-
-function arrayLastElement(array) { //done
-	return array[array.length - 1]
-}
-
-
-function calculateJourney(data){
-	let timeTable= mapTable(data);
-	let today = new WorkDay(timeTable[0]);
-	today.calculateAllTimes(timeTable);
-	//clearResults();
-	//printStatus(today);
-	//printAllResults(today);
-	return today;
-}
-
-//~~ functions below ~~//
 
 function splitComma(text){
 	return text.split(",");
@@ -35,17 +23,13 @@ function splitComma(text){
 function splitColon(text){
 	return text.split(":");
 }
+
 function joinComma(array){
 	return array.join(":");
 }
 
-function mapTable(data){
-	
-	let arrayOfdata = splitComma(data);
-	for (var i = arrayOfdata.length - 1; i >= 0; i--) {
-		arrayOfdata[i] = splitColon(arrayOfdata[i]);
-	}
-	return arrayOfdata;
+function arrayLastElement(array) { 
+	return array[array.length - 1]
 }
 
 function time_convert_to_minutes(time) {
@@ -72,36 +56,6 @@ function time_convert_array_to_hours(array) {
 	return array;
 }
 
-
-
-// function addTime(t1, t2){ //t2+t1
-
-// 	let result = [];
-// 	result[0] = Number(t2[0]*1 + t1[0]*1); //str*1 transforms numeric string to number
-// 	result[1] = Number(t2[1]*1 + t1[1]*1);
-	
-// 	if(result[1]>=60){
-// 		result[0] += 1;
-// 		result[1] -= 60;
-// 	}
-
-// 	return [result[0],result[1]];
-// }
-
-// function subTime(t1, t2){ //t2-t1
-
-// 	let result = [];
-// 	result[0] = Number(t2[0]*1 - t1[0]*1);
-// 	result[1] = Number(t2[1]*1 - t1[1]*1);
-	
-// 	if(result[1]<0){
-// 		result[0] -= 1;
-// 		result[1] += 60;
-// 	}
-
-// 	return [result[0],result[1]];
-// }
-
 function getCurrentTime(){
 	let d = new Date();
 	let hour = ('0'+d.getHours()).slice(-2);
@@ -113,63 +67,20 @@ function getCurrentDate(){
 	let d = new Date();
 	let day = ('0'+d.getDate()).slice(-2);
 	let month = ('0'+(d.getMonth()+1)).slice(-2); // +1 because month array is indexed at 0 (jan === 0)
-	//let year = ('0'+d.getFullYear()).slice(-2);
 	let year = d.getFullYear();
 	return [day, month, year]
 }
 
-// function getCurrentMonth(){
-// 	let d = new Date();
-// 	let month = ('0'+(d.getMonth()+1)).slice(-2); //nao sei porque +1... array index?
-//	let year = ('0'+d.getFullYear()).slice(-2);
-// 	return [month, year]
-// }
-
-function printResults(string) {
-	document.getElementById('results').innerHTML += "<p>"+string+"</p>";
-}
-
-function printStatus(obj){
-	if(obj.status=="extra-hours"){
-		document.getElementById('results').innerHTML += "<h4> EXTRA HOURS! </h4>";
+function mapTable(data){
+	
+	let arrayOfdata = splitComma(data);
+	for (var i = arrayOfdata.length - 1; i >= 0; i--) {
+		arrayOfdata[i] = splitColon(arrayOfdata[i]);
 	}
-	else if(obj.status=="working"){
-		document.getElementById('results').innerHTML += "<h4> Working </h4>";
-	}
-	else{
-		document.getElementById('results').innerHTML += "<h4> Off duty </h4>";
-	}
-}
-
-function printAllResults(obj){
-
-	printResults(obj.stringHoursDone());
-	printResults(obj.stringHoursLeft());
-	if(obj.status=="working"){
-		printResults(obj.stringLeaveTime());
-	}
-}
-
-function clearResults(){
-	document.getElementById('results').innerHTML = "";
+	return arrayOfdata;
 }
 
 //~~ classes ~~//
-
-// class Status {
-// 	var _label = {
-// 		0: "No show",
-// 		1: "Working",
-// 		2: "Break",
-// 		3: "Working",
-// 		4: "Done"
-// 	}
-
-// 	constructor(status) {
-// 		this.id = status
-// 		this.name = _label(status)
-// 	}
-// }
 
 class WorkDay {
 
@@ -185,17 +96,9 @@ class WorkDay {
 		this.hoursDone = this.calculateHoursDone(this.clocks, this.isWorking);
 		this.hoursLeft = this.calculateHoursLeft(this.hoursDone, this.workJourney);
 		this.leaveTime = this.calculateLeaveTime(this.hoursLeft, this.isWorking);
-		//this.status = this.getStatus(this.clocks) ; // working, not working, extra-hours
 	}
 
-	// getEntryTime(entry){ // necessary?
-	// 	let entryTime = [];
-	// 	entryTime[0]  = Number(entry[0]*1);
-	// 	entryTime[1]  = Number(entry[1]*1);
-	// 	return entryTime;
-	// }
-
-	isWorking(clocks) { //Done
+	isWorking(clocks) { 
 		if (clocks.length%2 === 0) {
 			return false;
 		}
@@ -203,30 +106,17 @@ class WorkDay {
 			return true;
 		}
 	}
-
-	// getStatus(clocks) { //done
-	// 	if(isWorking(clocks)) {
-	// 		status = {"id": 1, "name": "Working"};
-	// 	}
-	// 	else {
-	// 		status = {"id": 0, "name": "Not working"};
-	// 	}
-	// 	return status;
-	// }
 	
-	calculateHoursDone(clocks, isWorking){ //done
+	calculateHoursDone(clocks, isWorking){ 
 		var hoursDone = 0;
 		if(isWorking) {
 			for (var i = 0; i < clocks.length-1; i += 2) {
-				//hoursDone = addTime(hoursDone, subTime(clocks[i], clocks[i+1]));
 				hoursDone += clocks[i+1] - clocks[i];
 			}
-			//hoursDone = addTime(hoursDone, subTime(arrayLastElement(clocks), getCurrentTime()));
 			hoursDone += time_convert_to_minutes(getCurrentTime()) - arrayLastElement(clocks);
 		}
 		else {
 			for (var i = 0; i < clocks.length; i += 2) {
-				//hoursDone = addTime(hoursDone, subTime(clocks[i], clocks[i+1]));
 				hoursDone += clocks[i+1] - clocks[i];
 			}
 		}
@@ -234,8 +124,7 @@ class WorkDay {
 	}
 	
 
-	calculateHoursLeft(hoursDone, workJourney){ //Done
-		//var hoursLeft = subTime(hoursDone, workJourney)
+	calculateHoursLeft(hoursDone, workJourney){
 		var hoursLeft = workJourney - hoursDone;
 		if(hoursLeft < 0){
 			this.extraHours=true;
@@ -243,10 +132,9 @@ class WorkDay {
 		return Math.abs(hoursLeft);
 	}
 
-	calculateLeaveTime(hoursLeft, isWorking) { //Done
+	calculateLeaveTime(hoursLeft, isWorking) {
 		var leaveTime;
 		if(isWorking){
-			//leaveTime = addTime(getCurrentTime(), hoursLeft);
 			leaveTime = hoursLeft + time_convert_to_minutes(getCurrentTime());
 		}
 		else {
@@ -254,66 +142,20 @@ class WorkDay {
 		}
 		return leaveTime;
 	}
-
-	stringHoursDone(){
-		return "Horas trabalhadas: " + this.hoursDone[0] + " horas e " + this.hoursDone[1] + " minutos.";
-	}
-	stringEntryTime(){
-		return "Hora da entrada: " + this.entryTime[0] + " horas e " + this.entryTime[1] + "minutos.";
-	}
-	stringLeaveTime(){
-		return "Hora da saida: " + this.leaveTime[0] + " horas e " + this.leaveTime[1] + "minutos.";
-	}
-	stringHoursLeft(){
-		let string = "Faltam: " + this.hoursLeft[0] + " horas e " + this.hoursLeft[1];
-		if(this.status=="working"){
-			string += " minutos para ir embora.";
-		}
-		else{
-			string += " minutos a pagar.";
-		}
-		return string;
-	}
 }
 
-
-class Insert {
-
-	constructor(title, id, html) {
-		this.title = title;
-		this.id = id;
-		this.html = html;
-	}
-
-}
-
-chrome.storage.sync.get(['myJourney'], function(result) {
-	console.log(Number(1*result.myJourney));
-	myJourney = Number(1*result.myJourney);
-	main(myJourney);
-});
-//main();
+// ~~~~~ main ~~~~~ //
 
 function main(myJourney){
-//insert elements
 
-//populate table
-	let currentDate = getCurrentDate().join('/');
-	//let currentMonth = getCurrentMonth().join('/');
-	
-	//$("#month").html(currentMonth);
-	let data = $("td:contains('"+currentDate+"')").next().next().text();
-	//data = '11:45, 15:44, 16:29'; // short working
-	//data = '11:45, 15:44, 16:29, 20:17'; // short left
-	//data = '11:45, 15:44, 16:29, 20:17'; // just right
-	//data = '08:30'; // extra working
-	//data = '09:45, 15:44, 16:29, 20:17'; // extra left
-	
-	let timeTable;
+	var myBreak = 60;
+	var currentDate = getCurrentDate().join('/');
+	var data = $("td:contains('"+currentDate+"')").next().next().text();
+
+
 	if(data.length>1){
-		timeTable = mapTable(data);
-		let today = new WorkDay(timeTable);
-				
+		let timeTable = mapTable(data);
+		var today = new WorkDay(timeTable);
 		let monthHeader = "<tr style='font-weight:bold'><td>Resumo do Mês</td><td class='text-right' id='month'></td></tr>";
 		$("#tableTotalize").prepend(monthHeader);
 
@@ -342,3 +184,11 @@ function main(myJourney){
 		$(data_not_found).insertAfter("#tableTotalize");
 	}
 }
+
+chrome.storage.sync.get(['myJourney'], function(result) {
+	console.log(Number(1*result.myJourney)); 
+	myJourney = Number(1*result.myJourney); // 1* to turn str into int
+	console.log("Ahgora extension running!");
+	main(myJourney);
+});
+
