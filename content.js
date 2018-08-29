@@ -88,7 +88,7 @@ class WorkDay {
 		this.workJourney = myJourney;
 		this.breakDone = false;
 		this.extraHours = false;
-		this.minBreak = myBreak;
+		this.minBreak = 60; //min break defined by law
 
 		this.clocks = time_convert_array_to_minutes(readings);
 		this.entryTime = this.clocks[0];
@@ -148,10 +148,8 @@ class WorkDay {
 
 function main(myJourney){
 
-	var myBreak = 60;
 	var currentDate = getCurrentDate().join('/');
 	var data = $("td:contains('"+currentDate+"')").next().next().text();
-
 
 	if(data.length>1){
 		let timeTable = mapTable(data);
@@ -186,8 +184,10 @@ function main(myJourney){
 }
 
 chrome.storage.sync.get(['myJourney'], function(result) {
-	console.log(Number(1*result.myJourney)); 
 	myJourney = Number(1*result.myJourney); // 1* to turn str into int
+	if (myJourney == null ) { 
+		myJourney = 480;
+	}
 	console.log("Ahgora extension running!");
 	main(myJourney);
 });
