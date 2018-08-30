@@ -1,6 +1,6 @@
 {
   "name": "Calculadora de jornada - Ahgora",
-  "version": "0.5",
+  "version": "0.6.1",
   "description": "Adiciona uma tabela com informações adicionais e a hora estimada de saída do trabalho na pagina de batidas de ponto do ahgora.",
   "icons": { 
   "16": "clock.png",

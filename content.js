@@ -178,7 +178,7 @@ function main(myJourney){
 	}
 	else{
 		console.log('DATA NOT FOUND');
-		let data_not_found = "<h4>CURRENT DAY DATA NOT FOUND<h4><h5>Está no mês correto?<h5>";
+		let data_not_found = "<div style='text-align:center'><h4>ahgora extension error:</h4><h4>CURRENT DAY DATA NOT FOUND</h4><h5>Está no mês correto?</h5></div>";
 		$(data_not_found).insertAfter("#tableTotalize");
 	}
 }
