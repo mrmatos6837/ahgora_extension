@@ -18,9 +18,15 @@ function save_options() {
 	});
 }
 
+function remove_options() {
+	chrome.storage.sync.remove(['myJourney'], function(){
+		console.log("removed options");	
+	});
+}
+
 function restore_options() {
 	chrome.storage.sync.get({
-		myJourney: undefined
+		myJourney: null
   	}, function(items) {
     	document.getElementById('journey').value = items.myJourney;
   	});
@@ -28,6 +34,6 @@ function restore_options() {
 
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('save').addEventListener('click', save_options);
-  document.getElementById('restore').addEventListener('click', restore_options);
+  document.getElementById('restore').addEventListener('click', remove_options);
   load_options();
 });

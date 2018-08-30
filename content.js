@@ -184,11 +184,16 @@ function main(myJourney){
 }
 
 chrome.storage.sync.get(['myJourney'], function(result) {
-	myJourney = Number(1*result.myJourney); // 1* to turn str into int
-	if (myJourney == null ) { 
-		myJourney = 480;
+	if ( isNaN(result.myJourney) ) { 
+		console.log("Storage data not found. Resorting to default. (480 minutes)")
+		myJourney = 480; // 480 minutes default work journey
 	}
-	console.log("Ahgora extension running!");
+	else{
+		console.log("Storage data found. Journey set to " + result.myJourney)
+		myJourney = result.myJourney; // 1* to turn str into int
+	}
+	console.log("Running script...")
 	main(myJourney);
+	console.log("Ahgora extension finished execution!");
 });
 
