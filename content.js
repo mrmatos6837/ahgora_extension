@@ -28,7 +28,7 @@ function joinComma(array){
 	return array.join(":");
 }
 
-function arrayLastElement(array) { 
+function arrayLastElement(array) {
 	return array[array.length - 1]
 }
 
@@ -72,7 +72,7 @@ function getCurrentDate(){
 }
 
 function mapTable(data){
-	
+
 	let arrayOfdata = splitComma(data);
 	for (var i = arrayOfdata.length - 1; i >= 0; i--) {
 		arrayOfdata[i] = splitColon(arrayOfdata[i]);
@@ -98,7 +98,7 @@ class WorkDay {
 		this.leaveTime = this.calculateLeaveTime(this.hoursLeft, this.isWorking);
 	}
 
-	isWorking(clocks) { 
+	isWorking(clocks) {
 		if (clocks.length%2 === 0) {
 			return false;
 		}
@@ -106,8 +106,8 @@ class WorkDay {
 			return true;
 		}
 	}
-	
-	calculateHoursDone(clocks, isWorking){ 
+
+	calculateHoursDone(clocks, isWorking){
 		var hoursDone = 0;
 		if(isWorking) {
 			for (var i = 0; i < clocks.length-1; i += 2) {
@@ -122,7 +122,7 @@ class WorkDay {
 		}
 		return hoursDone;
 	}
-	
+
 
 	calculateHoursLeft(hoursDone, workJourney){
 		var hoursLeft = workJourney - hoursDone;
@@ -148,8 +148,10 @@ class WorkDay {
 
 function main(myJourney){
 
-	var currentDate = getCurrentDate().join('/');
+	var data = getCurrentDate()
+	var currentDate = data[0] + '/'  + data[1]
 	var data = $("td:contains('"+currentDate+"')").next().next().text();
+
 
 	if(data.length>1){
 		let timeTable = mapTable(data);
@@ -184,7 +186,7 @@ function main(myJourney){
 }
 
 chrome.storage.sync.get(['myJourney'], function(result) {
-	if ( isNaN(result.myJourney) ) { 
+	if ( isNaN(result.myJourney) ) {
 		console.log("Storage data not found. Resorting to default. (480 minutes)")
 		myJourney = 480; // 480 minutes default work journey
 	}
@@ -196,4 +198,3 @@ chrome.storage.sync.get(['myJourney'], function(result) {
 	main(myJourney);
 	console.log("Ahgora extension finished execution!");
 });
-
